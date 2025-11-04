@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.SemanticKernel;
 
 string yourDeploymentName = "gpt";
@@ -18,6 +19,10 @@ builder.Services.AddAzureOpenAIChatCompletion(
 
 var kernel = builder.Build();
 
+// Create a simple local chat stub to satisfy the existing usage of `chat`.
+// Replace this with a real chat completion client obtained from `kernel` when ready.
+var chat = new ChatStub();
+
 string input;
 
 do {
@@ -33,3 +38,12 @@ do {
     }
 }
 while (!string.IsNullOrWhiteSpace(input));
+
+class ChatStub
+{
+    public Task<string> CompleteAsync(string input)
+    {
+        // Simple echo response to keep the sample working without external services.
+        return Task.FromResult($"Echo: {input}");
+    }
+}
